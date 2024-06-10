@@ -11,28 +11,28 @@
                 <div class="p-6">
                     <h2 class="app-text font-bold">Solicitudes pendientes</h2>
 
-                    <div class="grid grid-cols-8">
+                    <div class="grid grid-cols-8 gap-2">
                         <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
                         <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
                         <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
                         <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
-                        <div class="col-span-full">
-                            <hr>
-                        </div>
-                        <div>
-                            <p class="app-text"></p>
-                            <ul>
-                                @foreach($solicitudesPendientes as $solicitud)
-                                    <li>
-                                        <a href="">
-                                            <div class="flex flex-row">
-                                                <p class="app-text">{{ $solicitud->N_solicitud }}</p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                        <div class="col-span-full"><hr></div>
+                        <ul class="col-span-full grid-cols-subgrid">
+                            @forelse($solicitudesPendientes as $solicitud)
+                                <li>
+                                    <a href="{{route('admin.solicitudes.show', ['solicitud' => $solicitud->id])}}">
+                                        <div class="grid grid-cols-8">
+                                            <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
+                                            <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
+                                            <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
+                                            <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            @empty
+                                <li class="app-text">No hay solicitudes pendientes</li>
+                            @endforelse
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -40,37 +40,38 @@
 
         <br>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="app-surface">
-                <div class="p-6">
-                    <h2 class="app-text font-bold">Solicitudes aprobadas</h2>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="app-surface">
+                    <div class="p-6">
+                        <h2 class="app-text font-bold">Solicitudes pendientes</h2>
 
-                    <div class="grid grid-cols-8">
-                        <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
-                        <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
-                        <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
-                        <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
-                        <div class="col-span-full">
-                            <hr>
-                        </div>
-                        <div>
-                            <p class="app-text"></p>
-                            <ul>
-                                @foreach($solicitudesAprobadas as $solicitud)
-                                    <li class="grid">
-                                        <a href="">
-                                            <div class="flex flex-row">
-                                                <p class="app-text">{{ $solicitud->N_solicitud }}</p>
+                        <div class="grid grid-cols-8 gap-2">
+                            <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
+                            <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
+                            <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
+                            <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                            <div class="col-span-full"><hr></div>
+                            <ul class="col-span-full grid-cols-subgrid">
+                                @forelse($solicitudesAprobadas as $solicitud)
+                                    <li>
+                                        <a href="{{route('admin.solicitudes.show', ['id' => $solicitud->id])}}">
+                                            <div class="grid grid-cols-8">
+                                                <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
+                                                <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
+                                                <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
+                                                <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
                                             </div>
                                         </a>
                                     </li>
-                                @endforeach
+                                @empty
+                                    <li class="app-text">No hay solicitudes pendientes</li>
+                                @endforelse
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
     </div>
 </x-app-layout>

@@ -11,6 +11,7 @@ use App\Models\perfil;
 
 class solicitud extends Model
 {
+    use HasFactory;
     protected $guarded = [];
 
     protected $attributes = [
@@ -31,13 +32,11 @@ class solicitud extends Model
         'aprobado' => false,
     ];
 
-    use HasFactory;
-
     public function tributo(): HasOne {
         return $this->hasOne(tributo::class);
     }
 
-    public function perfil(): HasOne {
+    public function perfil(): BelongsTo {
         return $this->BelongsTo(Perfil::class);
     }
 

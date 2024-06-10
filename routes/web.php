@@ -50,7 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
   })->name('dashboard');
 
   Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index');
-  Route::get('/solicitudes/{id}', [SolicitudController::class, 'show'])->name('solicitudes.show');
+  Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
 
 })->middleware(['auth']);
 
