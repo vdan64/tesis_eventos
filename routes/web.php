@@ -44,12 +44,14 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::prefix('funcionario')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
   Route::get('/dashboard', function () {
     return view('funcionario.dashboard');
-  })->name('funcionario.dashboard');
+  })->name('dashboard');
 
+  Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index');
   
+
 })->middleware(['auth']);
 
 

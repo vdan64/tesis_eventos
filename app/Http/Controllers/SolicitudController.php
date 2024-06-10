@@ -12,7 +12,16 @@ class SolicitudController extends Controller
      */
     public function index()
     {
-        //
+        if (auth()->user()->perfil->tipo == 'funcionario') {
+            $solicitudesAprobadas = solicitud::where('aprobado', true)->get();
+            $solicitudesPendientes = solicitud::where('aprobado', false)->get();
+            return view('funcionario.solicitudes.index', [
+                'solicitudesAprobadas' => $solicitudesAprobadas,
+                'solicitudesPendientes' => $solicitudesPendientes,
+            ]);
+        } else {
+            return view('solicitudes.index');
+        }
     }
 
     /**
@@ -31,7 +40,7 @@ class SolicitudController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $solicitud = solicitud::create([
             'perfil_id' => $request->user()->perfil->id,
             'nombre_evento' => $request->nombre_evento,
@@ -40,7 +49,7 @@ class SolicitudController extends Controller
             'fecha_solicitud' => $request->fecha_solicitud,
         ]);
 
-        
+
         return redirect(route('dashboard', absolute: false));
     }
 
@@ -74,5 +83,9 @@ class SolicitudController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function aprobar(solicitud $solicitud) {
+
     }
 }
