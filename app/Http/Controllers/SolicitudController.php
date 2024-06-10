@@ -58,7 +58,11 @@ class SolicitudController extends Controller
      */
     public function show(solicitud $solicitud)
     {
-        return view('solicitudes.show', ['solicitud' => $solicitud]);
+        if (auth()->user()->perfil->tipo == 'funcionario') {
+            return view('funcionario.solicitudes.show', ['solicitud' => $solicitud]);
+        } else {
+            return view('solicitudes.show', ['solicitud' => $solicitud]);
+        }
     }
 
     /**
