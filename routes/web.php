@@ -29,10 +29,6 @@ Route::middleware('auth')->group(function () {
       Route::post('/solicitudes/create', [SolicitudController::class, 'store'])->name('solicitudes.store');
       Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
 
-
-      Route::get('/solicitud/{id}', function(solicitud $solicitud) {
-        return view('solicitud', ['solicitud' => $solicitud]);
-      });
       Route::get('/permisos', function () {
         return view('permisos');
       });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\solicitud;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SolicitudController extends Controller
 {
@@ -20,7 +22,14 @@ class SolicitudController extends Controller
                 'solicitudesPendientes' => $solicitudesPendientes,
             ]);
         } else {
-            return view('solicitudes.index');
+            $sol = auth()->user()->perfil->solicitudes;
+
+            $solicitudesPendientes = $sol->filter(function ($item) { return $item->aprobado == false; });
+            $solicitudesAprobadas = $sol->filter(function ($item) { return $item->aprobado == true; });
+            return view('solicitudes.index', [
+                'solicitudesAprobadas' => $solicitudesAprobadas,
+                'solicitudesPendientes' => $solicitudesPendientes,
+            ]);
         }
     }
 
@@ -50,7 +59,7 @@ class SolicitudController extends Controller
         ]);
 
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('solicitudes.index', absolute: false));
     }
 
     /**
@@ -90,6 +99,12 @@ class SolicitudController extends Controller
     }
 
     public function aprobar(solicitud $solicitud) {
+        if (Gate::allows('aprobar-solicitud', $solicitud)) {
+            $solicitud->aprobado = true;
+            $solicitud->save();
+            return to_route('admin.solicitudes.index');
+        }
 
+        return Response::deny('Debe ser un funcionario o administrador');
     }
 }
