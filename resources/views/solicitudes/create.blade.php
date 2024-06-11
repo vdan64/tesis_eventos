@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('registro solicitud') }}
+            {{ __('Registro de nueva solicitud') }}
         </h2>
     </x-slot>
 
@@ -10,7 +10,7 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
-                <form action="{{route('solicitudes.store')}}" method="POST">
+                <form action="{{route('solicitudes.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="grid grid-cols-8 gap-4">
@@ -43,6 +43,34 @@
                                                   name="fecha_solicitud" :value="old('fecha_solicitud')" required/>
                                     <x-input-error :messages="$errors->get('fecha_solicitud')" class="mt-2"/>
                                 </div>
+
+                                <div class="col-span-2">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <x-input-label for="numero_entradas" :value="__('Numero de entradas')"/>
+                                            <x-text-input id="numero_entradas" class="block mt-1 w-full" type="number" min="0"
+                                                          name="numero_entradas" :value="old('numero_entradas')" required/>
+                                            <x-input-error :messages="$errors->get('numero_entradas')" class="mt-2"/>
+                                        </div>
+                                        <div>
+                                            <x-input-label for="numero_funciones" :value="__('Numero de funciones')"/>
+                                            <x-text-input id="numero_funciones" class="block mt-1 w-full" type="number" min="0"
+                                                          name="numero_funciones" :value="old('numero_funciones')" required/>
+                                            <x-input-error :messages="$errors->get('numero_funciones')" class="mt-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4">
+                                <div class="col-span-1">
+                                    <x-input-label for="rif" :value="__('RIF de la productora')"/>
+                                    <x-text-input type="file" id="rif" name="rif_productora" :value="old('rif_productora')" accept=".jpeg, .jpg, .png, .pdf" required></x-text-input>
+                                    <x-input-error :messages="$errors->get('rif_productora')" class="mt-2"/>
+                                </div>
+
                             </div>
                         </div>
 

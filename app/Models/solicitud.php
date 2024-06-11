@@ -29,6 +29,8 @@ class solicitud extends Model
         'id_inspector' => '',
         'cedula_aapp' => '',
         'cedula_dat' => '',
+        'numero_entradas' => 0,
+        'numero_funciones' => 0,
         'aprobado' => false,
     ];
 

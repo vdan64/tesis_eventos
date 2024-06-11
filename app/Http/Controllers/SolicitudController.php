@@ -49,6 +49,11 @@ class SolicitudController extends Controller
      */
     public function store(Request $request)
     {
+        $rif = $request->file('rif_productora');
+
+        if (!$rif->isValid()) {
+            abort(500, 'Error al subir el archivo RIF. Intente nuevamente.');
+        }
 
         $solicitud = solicitud::create([
             'perfil_id' => $request->user()->perfil->id,
@@ -56,8 +61,10 @@ class SolicitudController extends Controller
             'descripcion' => $request->descripcion,
             'fecha_inspeccion' => $request->fecha_inspeccion,
             'fecha_solicitud' => $request->fecha_solicitud,
+            'url_rif' => $rif->store('rif'),
+            'numero_entradas' => $request->numero_entradas,
+            'numero_funciones' => $request->numero_funciones,
         ]);
-
 
         return redirect(route('solicitudes.index', absolute: false));
     }

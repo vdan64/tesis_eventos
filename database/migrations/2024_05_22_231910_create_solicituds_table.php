@@ -29,6 +29,9 @@ return new class extends Migration
             $table->string('id_inspector');
             $table->string('cedula_aapp');
             $table->string('cedula_dat');
+            $table->string('url_rif');
+            $table->integer('numero_entradas');
+            $table->integer('numero_funciones');
             $table->boolean('aprobado');
         });
     }
