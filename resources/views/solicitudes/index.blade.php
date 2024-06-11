@@ -19,7 +19,7 @@
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesPendientes as $solicitud)
                             <li>
-                                <a href="{{route('admin.solicitudes.show', ['solicitud' => $solicitud->id])}}">
+                                <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
                                         <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>

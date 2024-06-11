@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\solicitud;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('aprobar-solicitud', function (User $user, solicitud $solicitud) {
             return $user->perfil()->tipo == 'funcionario';
         });
+
+        Gate::before(fn(User $user) => $user->perfil->tipo == 'funcionario');
     }
 }

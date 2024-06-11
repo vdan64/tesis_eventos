@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\tributo;
-use App\Models\perfil;
+use App\Models\Perfil;
 
 class solicitud extends Model
 {

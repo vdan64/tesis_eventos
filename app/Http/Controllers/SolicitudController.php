@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\solicitud;
+use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class SolicitudController extends Controller
 {
@@ -24,8 +26,12 @@ class SolicitudController extends Controller
         } else {
             $sol = auth()->user()->perfil->solicitudes;
 
-            $solicitudesPendientes = $sol->filter(function ($item) { return $item->aprobado == false; });
-            $solicitudesAprobadas = $sol->filter(function ($item) { return $item->aprobado == true; });
+            $solicitudesPendientes = $sol->filter(function ($item) {
+                return $item->aprobado == false;
+            });
+            $solicitudesAprobadas = $sol->filter(function ($item) {
+                return $item->aprobado == true;
+            });
             return view('solicitudes.index', [
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
@@ -105,7 +111,8 @@ class SolicitudController extends Controller
         //
     }
 
-    public function aprobar(solicitud $solicitud) {
+    public function aprobar(solicitud $solicitud)
+    {
         if (Gate::allows('aprobar-solicitud', $solicitud)) {
             $solicitud->aprobado = true;
             $solicitud->save();
@@ -113,5 +120,17 @@ class SolicitudController extends Controller
         }
 
         return Response::deny('Debe ser un funcionario o administrador');
+    }
+
+    public function getFile(Request $request, string $rif)
+    {
+        if ($request->is('rif/*')) {
+
+            Gate::allowIf(fn(User $user) => $user->id == solicitud::where('url_rif', 'rif/' . $rif)->first()->perfil->user_id);
+
+            return response()->file(storage_path('app/rif/' . $rif));
+        }
+
+        abort(403, "Usuario no autorizado para ver archivo");
     }
 }
