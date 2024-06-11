@@ -71,6 +71,11 @@
                                     <x-input-error :messages="$errors->get('rif_productora')" class="mt-2"/>
                                 </div>
 
+                                <div class="col-span-1">
+                                    <x-input-label for="permiso" :value="__('Permiso establecimiento')"/>
+                                    <x-text-input type="file" id="permiso" name="permiso" :value="old('permiso')" accept=".jpeg, .jpg, .png, .pdf" required></x-text-input>
+                                    <x-input-error :messages="$errors->get('permiso')" class="mt-2"/>
+                                </div>
                             </div>
                         </div>
 

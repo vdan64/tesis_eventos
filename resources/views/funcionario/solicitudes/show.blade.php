@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('registro solicitud') }}
+            {{ __('Registro solicitud') }}
         </h2>
     </x-slot>
 
@@ -39,6 +39,44 @@
                                               name="fecha_solicitud" required/>
                                 <x-input-error :messages="$errors->get('fecha_solicitud')" class="mt-2"/>
                             </div>
+
+                            <div class="col-span-2">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <x-input-label for="numero_entradas" :value="__('Numero de entradas')"/>
+                                        <x-text-input disabled id="numero_entradas" class="block mt-1 w-full" type="number" min="0" value="{{ $solicitud->numero_entradas }}"
+                                                      name="numero_entradas" required/>
+
+                                    </div>
+                                    <div>
+                                        <x-input-label for="numero_funciones" :value="__('Numero de funciones')"/>
+                                        <x-text-input disabled id="numero_funciones" class="block mt-1 w-full" type="number" min="0" value="{{ $solicitud->numero_funciones }}"
+                                                      name="numero_funciones" required/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="col-span-full"><x-input-label :value="__('Archivos')"/></div>
+                            <div class="col-span-1">
+                                <a href="{{ asset($solicitud->url_rif) }}" target="_blank">
+                                    <div class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                        <span class="app-text font-bold">RIF Productora</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-span-1">
+                                <a href="{{ asset($solicitud->url_permiso) }}" target="_blank">
+                                    <div class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                        <span class="app-text font-bold">Permiso establecimiento</span>
+                                    </div>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
 

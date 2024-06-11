@@ -61,10 +61,19 @@
                     <div class="col-span-full">
                         <div class="grid grid-cols-4 gap-4">
                             <div class="col-span-full"><x-input-label :value="__('Archivos')"/></div>
+
                             <div class="col-span-1">
                                 <a href="{{ asset($solicitud->url_rif) }}" target="_blank">
                                     <div class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center">
                                         <span class="app-text font-bold">RIF <br> Productora</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-span-1">
+                                <a href="{{ asset($solicitud->url_permiso) }}" target="_blank">
+                                    <div class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                        <span class="app-text font-bold">Permiso establecimiento</span>
                                     </div>
                                 </a>
                             </div>

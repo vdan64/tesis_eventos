@@ -36,7 +36,8 @@ Route::middleware('auth')->group(function () {
         return view('permisos-pagados');
       });
 
-    Route::get('rif/{rif}', [SolicitudController::class, 'getFile'])->name('solicitudes.get_file');
+    Route::get('rif/{file}', [SolicitudController::class, 'getFile']);
+    Route::get('permiso/{file}', [SolicitudController::class, 'getFile']);
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

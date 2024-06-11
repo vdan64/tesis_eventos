@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('cedula_aapp');
             $table->string('cedula_dat');
             $table->string('url_rif');
+            $table->string('url_permiso');
             $table->integer('numero_entradas');
             $table->integer('numero_funciones');
             $table->boolean('aprobado');

@@ -56,9 +56,14 @@ class SolicitudController extends Controller
     public function store(Request $request)
     {
         $rif = $request->file('rif_productora');
+        $permiso = $request->file('permiso');
 
         if (!$rif->isValid()) {
             abort(500, 'Error al subir el archivo RIF. Intente nuevamente.');
+        }
+
+        if (!$permiso->isValid()) {
+            abort(500, 'Error al subir el archivo Permiso. Intente nuevamente.');
         }
 
         $solicitud = solicitud::create([
@@ -68,6 +73,7 @@ class SolicitudController extends Controller
             'fecha_inspeccion' => $request->fecha_inspeccion,
             'fecha_solicitud' => $request->fecha_solicitud,
             'url_rif' => $rif->store('rif'),
+            'url_permiso' => $permiso->store('permiso'),
             'numero_entradas' => $request->numero_entradas,
             'numero_funciones' => $request->numero_funciones,
         ]);
@@ -122,13 +128,19 @@ class SolicitudController extends Controller
         return Response::deny('Debe ser un funcionario o administrador');
     }
 
-    public function getFile(Request $request, string $rif)
+    public function getFile(Request $request, string $file)
     {
         if ($request->is('rif/*')) {
 
-            Gate::allowIf(fn(User $user) => $user->id == solicitud::where('url_rif', 'rif/' . $rif)->first()->perfil->user_id);
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('url_rif', 'rif/' . $file)->first()->perfil->user_id);
 
-            return response()->file(storage_path('app/rif/' . $rif));
+            return response()->file(storage_path('app/rif/' . $file));
+        }
+
+        if ($request->is('permiso/*')) {
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('url_permiso', 'permiso/' . $file)->first()->perfil->user_id);
+
+            return response()->file(storage_path('app/permiso/' . $file));
         }
 
         abort(403, "Usuario no autorizado para ver archivo");
