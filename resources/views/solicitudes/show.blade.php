@@ -17,6 +17,19 @@
                         <x-input-error :messages="$errors->get('nombre_evento')" class="mt-2"/>
                     </div>
 
+                    <div class="col-span-4 grid grid-cols-2 gap-4">
+                        <div class="">
+                            <x-input-label for="Nsolicitud" :value="__('Numero de solicitud')"/>
+                            <x-text-input placeholder="Nro. de solicitud" id="Nsolicitud"
+                                          class="block mt-1 w-full" type="text" name="Nsolicitud" value="{{ $solicitud->N_solicitud ?? "" }}"
+                            />
+                            <x-input-error :messages="$errors->get('Nsolicitud')" class="mt-2"/>
+                        </div>
+                        <div class="h-full content-end">
+                            <x-primary-button x-init="" x-on:click="asignarNumero({{ $solicitud->id }})">Asignar numero de solicitud</x-primary-button>
+                        </div>
+                    </div>
+
                     <div class="col-start-1 col-end-9">
                         <x-input-label for="descripcion" :value="__('Descripcion')"/>
                         <x-text-input disabled value="{{ $solicitud->descripcion }}" id="descripcion" class="block mt-1 w-full" type="text" name="descripcion"

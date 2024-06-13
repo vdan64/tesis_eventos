@@ -28,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
             return $user->perfil()->tipo == 'funcionario';
         });
 
+        Gate::define('asignar-numero', function (User $user, solicitud $solicitud) {
+
+        });
+
         Gate::before(fn(User $user) => $user->perfil->tipo == 'funcionario');
     }
 }

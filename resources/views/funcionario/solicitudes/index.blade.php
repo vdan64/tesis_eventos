@@ -44,7 +44,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="app-surface">
                     <div class="p-6">
-                        <h2 class="app-text font-bold">Solicitudes pendientes</h2>
+                        <h2 class="app-text font-bold">Solicitudes provisionales</h2>
 
                         <div class="grid grid-cols-8 gap-2">
                             <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
@@ -55,7 +55,7 @@
                             <ul class="col-span-full grid-cols-subgrid">
                                 @forelse($solicitudesAprobadas as $solicitud)
                                     <li>
-                                        <a href="{{route('admin.solicitudes.show', ['id' => $solicitud->id])}}">
+                                        <a href="{{route('admin.solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                             <div class="grid grid-cols-8">
                                                 <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
                                                 <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>

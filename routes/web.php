@@ -47,6 +47,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
   Route::get('/solicitudes', [SolicitudController::class, 'index'])->name('solicitudes.index');
   Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
+  Route::patch('/solicitudes/{solicitud}/aprobar', [SolicitudController::class, 'aprobar']);
+  Route::patch('/solicitudes/{solicitud}/asignarnumero', [SolicitudController::class, 'asignarNumero']);
 
 })->middleware(['auth']);
 

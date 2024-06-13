@@ -117,15 +117,33 @@ class SolicitudController extends Controller
         //
     }
 
-    public function aprobar(solicitud $solicitud)
+    public function aprobar(Request $request, solicitud $solicitud)
     {
+
         if (Gate::allows('aprobar-solicitud', $solicitud)) {
+            if ($solicitud->aprobado) {
+                return response('La solicitud ya se encuentra aprobada', 400);
+            }
+
             $solicitud->aprobado = true;
+            $solicitud->fecha_permisoprovisional = now();
             $solicitud->save();
-            return to_route('admin.solicitudes.index');
+            return response('Solicitud aprobada', 200);
         }
 
-        return Response::deny('Debe ser un funcionario o administrador');
+        abort(403, 'No posee autoridad para aprobar la solicitud');
+    }
+
+    public function asignarNumero(Request $request, solicitud $solicitud) {
+//        return response('');
+        if (Gate::allows('asignar-numero', $solicitud)) {
+
+            $numero = $request->input('numero');
+            $solicitud->N_solicitud = $numero;
+            $solicitud->save();
+            return response($numero, 200);
+        }
+        abort(403, 'No posee autoridad para asignar numero a la solicitud');
     }
 
     public function getFile(Request $request, string $file)
@@ -143,6 +161,6 @@ class SolicitudController extends Controller
             return response()->file(storage_path('app/permiso/' . $file));
         }
 
-        abort(403, "Usuario no autorizado para ver archivo");
+        abort(403, 'Usuario no autorizado para ver archivo');
     }
 }

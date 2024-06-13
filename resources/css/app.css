@@ -13,3 +13,7 @@
         @apply bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg
     }
 }
+
+@layer base {
+    [x-cloak] { display: none !important; }
+}
