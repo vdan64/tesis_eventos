@@ -23,6 +23,11 @@ class SolicitudController extends Controller
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
             ]);
+        } else if (auth()->user()->perfil->tipo == 'dat') {
+            $solProvisionales = solicitud::where('permiso_provisional', "!=", '')->get();
+            $solDefinitivas = solicitud::where('permiso_definitivo', "!=", '')->get();
+
+            
         } else {
             $sol = auth()->user()->perfil->solicitudes;
 

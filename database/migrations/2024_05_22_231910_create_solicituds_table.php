@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('fecha_inspeccion');
             $table->date('fecha_solicitud');
             $table->string('permiso_provisional');
+            $table->string('permiso_definitivo');
             $table->date('fecha_evento');
             $table->date('fecha_permisoprovisional');
             $table->date('fecha_permisodefinitivo');

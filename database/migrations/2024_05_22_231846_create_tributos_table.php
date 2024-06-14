@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('tributos', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('idpago');
+            $table->string('idpago');
             $table->string('Nsolicitud');
             $table->string('descripcion');
-            $table->integer('tipo'); 
-            $table->date('fechapago');
+            $table->integer('tipo');
+            $table->string('cuenta_destino'); 
+            $table->date('fechapago')->nullable();
             $table->double('monto');  
-
+            $table->bool('confirmado');
 
         });
     }

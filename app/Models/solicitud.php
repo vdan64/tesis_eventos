@@ -23,6 +23,7 @@ class solicitud extends Model
         'fecha_inspeccion' => '2024-05-13',
         'fecha_solicitud' => '2024-05-13',
         'permiso_provisional' => '',
+        'permiso_definitivo' => '',
         'fecha_evento' => '2024-05-13',
         'fecha_permisoprovisional' => '2024-05-13',
         'fecha_permisodefinitivo' => '2024-05-13',

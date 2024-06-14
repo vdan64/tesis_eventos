@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('cedula');
-            $table->enum('tipo', ['solicitante', 'funcionario']);
+            $table->enum('tipo', ['solicitante', 'funcionario', 'dat']);
             $table->string('rif');
             $table->string('nombre');
             $table->string('direccion');
