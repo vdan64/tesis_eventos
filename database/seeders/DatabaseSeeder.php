@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\solicitud;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -35,6 +36,12 @@ class DatabaseSeeder extends Seeder
             'telefono' => '02812342323',
             'direccion' => 'bna',
         ]);
+
+        
+
+        
+
+        $solicitudes = solicitud::factory()->count(3)->for($user->perfil)->create();
 
         $user = User::create([
             'name' => 'funcionario',

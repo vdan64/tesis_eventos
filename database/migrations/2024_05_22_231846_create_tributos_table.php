@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cuenta_destino'); 
             $table->date('fechapago')->nullable();
             $table->double('monto');  
-            $table->bool('confirmado');
+            $table->boolean('confirmado');
 
         });
     }
