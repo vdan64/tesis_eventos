@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\solicitud;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Factories\SolicitudFactory;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -37,11 +39,7 @@ class DatabaseSeeder extends Seeder
             'direccion' => 'bna',
         ]);
 
-        
-
-        
-
-        $solicitudes = solicitud::factory()->count(3)->for($user->perfil)->create();
+//        $solicitudes = solicitud::factory()->count(3)->for($user->perfil)->create();
 
         $user = User::create([
             'name' => 'funcionario',
@@ -58,5 +56,7 @@ class DatabaseSeeder extends Seeder
             'direccion' => 'bna',
             'tipo' => 'funcionario',
         ]);
+
+
     }
 }

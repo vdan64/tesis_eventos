@@ -17,17 +17,25 @@ class SolicitudController extends Controller
     public function index()
     {
         if (auth()->user()->perfil->tipo == 'funcionario') {
-            $solicitudesAprobadas = solicitud::where('aprobado', true)->get();
+
+            $solicitudesAprobadas = solicitud::where('permiso_definitivo', '!=', '')->get();
             $solicitudesPendientes = solicitud::where('aprobado', false)->get();
+            $solicitudesProvisionales = solicitud::where('permiso_provisional', "!=", '')->get();
             return view('funcionario.solicitudes.index', [
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
+                'solicitudesProvisionales' => $solicitudesProvisionales,
             ]);
         } else if (auth()->user()->perfil->tipo == 'dat') {
             $solProvisionales = solicitud::where('permiso_provisional', "!=", '')->get();
             $solDefinitivas = solicitud::where('permiso_definitivo', "!=", '')->get();
 
-            
+            return view('dat.solicitudes.index', [
+                'solicitudesAprobadas' => $solDefinitivas,
+                'solicitudesProvisionales' => $solProvisionales,
+            ]);
+
+
         } else {
             $sol = auth()->user()->perfil->solicitudes;
 

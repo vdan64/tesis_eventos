@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('tributos', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('idpago');
+            $table->foreignId('solicitud_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->integer('idpago')->nullable();
             $table->string('Nsolicitud');
             $table->string('descripcion');
             $table->integer('tipo');
-            $table->string('cuenta_destino'); 
+            $table->string('cuenta_destino');
             $table->date('fechapago')->nullable();
-            $table->double('monto');  
+            $table->double('monto');
             $table->boolean('confirmado');
 
         });
