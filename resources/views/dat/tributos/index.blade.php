@@ -19,7 +19,7 @@
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($tributosPendientes as $tributo)
                             <li>
-                                <a href="{{route('tributos.show', ['tributo' => $tributo->id])}}">
+                                <a href="{{route('dat.solicitudes.show', ['tributo' => $tributo->id])}}">
                                     <div class="grid grid-cols-8">
                                         <p class="app-text col-span-1">{{ date_format($tributo->created_at, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $tributo->Nsolicitud ?: "No asignado"  }}</p>
@@ -49,28 +49,31 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
-                <h2 class="app-text font-bold">Solicitudes provisionales</h2>
+                <h2 class="app-text font-bold">Tributos reportados</h2>
 
                 <div class="grid grid-cols-8 gap-2">
                     <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
-                    <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
-                    <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                    <div class="col-span-2"><p class="app-text text-center">Descripcion</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Monto</p></div>
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
-                        @forelse($solicitudesPendientes as $solicitud)
+                        @forelse($tributosReportados as $tributo)
                             <li>
-                                <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
+                                <a href="{{route('tributos.show', ['tributo' => $tributo->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
-                                        <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                        <p class="app-text col-span-1">{{ date_format($tributo->created_at, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-2">{{ $tributo->Nsolicitud ?: "No asignado"  }}</p>
+                                        <p class="app-text col-span-2">{{ $tributo->descripcion }}</p>
+                                        <p class="app-text col-span-1">{{ $tributo->monto }}</p>
+                                        <p class="col-span-1"></p>
+
+                                        <p></p>
                                     </div>
                                 </a>
                             </li>
                         @empty
-                            <li class="app-text">No hay solicitudes pendientes</li>
+                            <li class="app-text">No hay tributos reportados</li>
                         @endforelse
                     </ul>
                 </div>
@@ -82,28 +85,31 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
-                <h2 class="app-text font-bold">Solicitudes definitivo   </h2>
+                <h2 class="app-text font-bold">Tributos confirmados</h2>
 
                 <div class="grid grid-cols-8 gap-2">
                     <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
-                    <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
-                    <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                    <div class="col-span-2"><p class="app-text text-center">Descripcion</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Monto</p></div>
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
-                        @forelse($solicitudesPendientes as $solicitud)
+                        @forelse($tributosConfirmados as $tributo)
                             <li>
-                                <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
+                                <a href="{{route('tributos.show', ['tributo' => $tributo->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
-                                        <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                        <p class="app-text col-span-1">{{ date_format($tributo->created_at, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-2">{{ $tributo->Nsolicitud ?: "No asignado"  }}</p>
+                                        <p class="app-text col-span-2">{{ $tributo->descripcion }}</p>
+                                        <p class="app-text col-span-1">{{ $tributo->monto }}</p>
+                                        <p class="col-span-1"></p>
+
+                                        <p></p>
                                     </div>
                                 </a>
                             </li>
                         @empty
-                            <li class="app-text">No hay solicitudes pendientes</li>
+                            <li class="app-text">No hay tributos confirmados</li>
                         @endforelse
                     </ul>
                 </div>
@@ -112,7 +118,5 @@
         </div>
 
     </div>
-
-    <x-modal :show="{{ true }}">No se que poner aqui xd</x-modal>
 
 </x-app-layout>

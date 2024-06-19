@@ -57,6 +57,21 @@ class DatabaseSeeder extends Seeder
             'tipo' => 'funcionario',
         ]);
 
+        $user = User::create([
+            'name' => 'Pedro Garcia',
+            'email' => 'dat@example.com',
+            'password' => Hash::make('dat'),
+        ]);
+
+        $user->perfil()->create([
+            'nombre' => 'dat',
+            'cedula' => '45454545',
+            'rif' => 'J45454545',
+            'mail' => 'dat@example.com',
+            'telefono' => '02812342323',
+            'direccion' => 'bna',
+            'tipo' => 'dat',
+        ]);
 
     }
 }

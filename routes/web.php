@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('rif/{file}', [SolicitudController::class, 'getFile']);
     Route::get('permiso/{file}', [SolicitudController::class, 'getFile']);
+
+    Route::get('permiso_prov/{file}', [SolicitudController::class, 'getFile']);
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -79,8 +81,9 @@ Route::prefix('dat')->name('dat.')->group(function () {
         Route::post('/', [TributoController::class, 'store'])->name('store');
         Route::patch('/{tributo}/reportar', [TributoController::class, 'reportar'])->name('reportar');
         Route::patch('/{tributo}/confirmar', [TributoController::class, 'confirmar'])->name('confirmar');
-
     });
+
+    Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
 
 })->middleware(['auth']);
 

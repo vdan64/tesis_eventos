@@ -49,7 +49,7 @@
                 <h2 class="app-text font-bold">Solicitudes provisionales</h2>
 
                 <div class="grid grid-cols-8 gap-2">
-                    <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Fecha aprobacion</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
                     <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
@@ -59,7 +59,40 @@
                             <li>
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-1">{{ date_format(date_create($solicitud->fecha_permisoprovisional), 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
+                                        <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
+                                        <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                    </div>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="app-text">No hay solicitudes provisonales</li>
+                        @endforelse
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <br>
+
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="app-surface p-6">
+                <h2 class="app-text font-bold">Solicitudes definitivas</h2>
+
+                <div class="grid grid-cols-8 gap-2">
+                    <div class="col-span-1"><p class="app-text text-center">Fecha aprobacion</p></div>
+                    <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
+                    <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
+                    <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                    <div class="col-span-full"><hr></div>
+                    <ul class="col-span-full grid-cols-subgrid">
+                        @forelse($solicitudesAprobadas as $solicitud)
+                            <li>
+                                <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
+                                    <div class="grid grid-cols-8">
+                                        <p class="app-text col-span-1">{{ date_format($solicitud->fecha_permisodefinitivo, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
@@ -79,20 +112,20 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
-                <h2 class="app-text font-bold">Solicitudes definitivas</h2>
+                <h2 class="app-text font-bold">Solicitudes rechazadas</h2>
 
                 <div class="grid grid-cols-8 gap-2">
-                    <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Fecha rechazo</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
                     <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
-                        @forelse($solicitudesDefinitivas as $solicitud)
+                        @forelse($solicitudesRechazadas as $solicitud)
                             <li>
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-1">{{ date_format($solicitud->fecha_permisodefinitivo, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
@@ -100,14 +133,13 @@
                                 </a>
                             </li>
                         @empty
-                            <li class="app-text">No hay solicitudes aprobadas</li>
+                            <li class="app-text">No hay solicitudes rechazadas</li>
                         @endforelse
                     </ul>
                 </div>
 
             </div>
         </div>
-
     </div>
 
 </x-app-layout>

@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('permiso_provisional');
             $table->string('permiso_definitivo');
             $table->date('fecha_evento');
-            $table->date('fecha_permisoprovisional');
-            $table->date('fecha_permisodefinitivo');
+            $table->date('fecha_permisoprovisional')->nullable();
+            $table->date('fecha_permisodefinitivo')->nullable();
             $table->string('id_inspector');
             $table->string('cedula_aapp');
             $table->string('cedula_dat');
@@ -34,7 +34,8 @@ return new class extends Migration
             $table->string('url_permiso');
             $table->integer('numero_entradas');
             $table->integer('numero_funciones');
-            $table->boolean('aprobado');
+            $table->enum('estado', ['pendiente', 'provisional', 'pagado', 'aprobado', 'rechazado']);
+            $table->string('razon_rechazo');
         });
     }
 

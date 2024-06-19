@@ -25,14 +25,15 @@ class solicitud extends Model
         'permiso_provisional' => '',
         'permiso_definitivo' => '',
         'fecha_evento' => '2024-05-13',
-        'fecha_permisoprovisional' => '2024-05-13',
-        'fecha_permisodefinitivo' => '2024-05-13',
+        'fecha_permisoprovisional' => null,
+        'fecha_permisodefinitivo' => null,
         'id_inspector' => '',
         'cedula_aapp' => '',
         'cedula_dat' => '',
         'numero_entradas' => 0,
         'numero_funciones' => 0,
-        'aprobado' => false,
+        'estado' => 'pendiente',
+        'razon_rechazo' => '',
     ];
 
     public function tributo(): HasOne {

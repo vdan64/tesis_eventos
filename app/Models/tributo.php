@@ -15,7 +15,7 @@ class tributo extends Model
     protected $guarded = [];
 
     protected $attributes = [
-        'idpago' => '',
+        'idpago' => null,
         'Nsolicitud' => '',
         'descripcion' => '',
         'tipo' => 0,

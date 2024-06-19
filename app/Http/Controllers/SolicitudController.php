@@ -18,36 +18,42 @@ class SolicitudController extends Controller
     {
         if (auth()->user()->perfil->tipo == 'funcionario') {
 
-            $solicitudesAprobadas = solicitud::where('permiso_definitivo', '!=', '')->get();
-            $solicitudesPendientes = solicitud::where('aprobado', false)->get();
-            $solicitudesProvisionales = solicitud::where('permiso_provisional', "!=", '')->get();
+            $solicitudesAprobadas = solicitud::where('estado', 'aprobado')->get();
+            $solicitudesPendientes = solicitud::where('estado', 'pendiente')->get();
+            $solicitudesProvisionales = solicitud::where('estado', 'provisional')->get();
             return view('funcionario.solicitudes.index', [
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
                 'solicitudesProvisionales' => $solicitudesProvisionales,
             ]);
         } else if (auth()->user()->perfil->tipo == 'dat') {
-            $solProvisionales = solicitud::where('permiso_provisional', "!=", '')->get();
-            $solDefinitivas = solicitud::where('permiso_definitivo', "!=", '')->get();
+            $solProvisionales = solicitud::where('estado', 'provisional')->get();
+            $solSinTributo = $solProvisionales->filter(fn ($solicitud) => $solicitud->tributo == null);
+            $solConTributo = $solProvisionales->filter(fn ($solicitud) => $solicitud->tributo != null);
+            $solDefinitivas = solicitud::where('estado', 'aprobado')->get();
 
             return view('dat.solicitudes.index', [
+                'solicitudesSinTributo' => $solSinTributo,
+                'solicitudesConTributo' => $solConTributo,
                 'solicitudesAprobadas' => $solDefinitivas,
-                'solicitudesProvisionales' => $solProvisionales,
             ]);
 
 
         } else {
-            $sol = auth()->user()->perfil->solicitudes;
 
-            $solicitudesPendientes = $sol->filter(function ($item) {
-                return $item->aprobado == false;
-            });
-            $solicitudesAprobadas = $sol->filter(function ($item) {
-                return $item->aprobado == true;
-            });
-            return view('solicitudes.index', [
+            $perfil = auth()->user()->perfil;
+
+            $solicitudesPendientes = solicitud::where('perfil_id', $perfil->id)->where('estado', 'pendiente')->get();
+            $solicitudesProvisionales = solicitud::where('perfil_id', $perfil->id)->where('estado', 'provisional')->get();
+            $solicitudesAprobadas = solicitud::where('perfil_id', $perfil->id)->where('estado', 'aprobado')->get();
+            $solicitudesRechazadas = solicitud::where('perfil_id', $perfil->id)->where('estado', 'rechazado')->get();
+
+
+            return view('solicitante.solicitudes.index', [
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
+                'solicitudesProvisionales' => $solicitudesProvisionales,
+                'solicitudesRechazadas' => $solicitudesRechazadas,
             ]);
         }
     }
@@ -60,7 +66,7 @@ class SolicitudController extends Controller
         if ($request->user()->perfil->tipo == 'funcionario') {
             return redirect(route('funcionario.dashboard', absolute: false));
         }
-        return view('solicitudes.create');
+        return view('solicitante.solicitudes.create');
     }
 
     /**
@@ -101,8 +107,10 @@ class SolicitudController extends Controller
     {
         if (auth()->user()->perfil->tipo == 'funcionario') {
             return view('funcionario.solicitudes.show', ['solicitud' => $solicitud]);
+        } else if (auth()->user()->perfil->tipo == 'dat') {
+            return view('dat.solicitudes.show', ['solicitud' => $solicitud]);
         } else {
-            return view('solicitudes.show', ['solicitud' => $solicitud]);
+            return view('solicitante.solicitudes.show', ['solicitud' => $solicitud]);
         }
     }
 
@@ -134,14 +142,15 @@ class SolicitudController extends Controller
     {
 
         if (Gate::allows('aprobar-solicitud', $solicitud)) {
-            if ($solicitud->aprobado) {
-                return response('La solicitud ya se encuentra aprobada', 400);
+            if ($solicitud->estado == 'provisional') {
+                return response('La solicitud ya se encuentra aprobada provisionalmente', 400);
             }
 
-            $solicitud->aprobado = true;
+            $solicitud->estado = 'provisional';
             $solicitud->fecha_permisoprovisional = now();
+            $solicitud->permiso_provisional = 'permiso_prov/permiso_provisional.pdf';
             $solicitud->save();
-            return response('Solicitud aprobada', 200);
+            return response('Solicitud provional aprobada', 200);
         }
 
         abort(403, 'No posee autoridad para aprobar la solicitud');
@@ -172,6 +181,12 @@ class SolicitudController extends Controller
             Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('url_permiso', 'permiso/' . $file)->first()->perfil->user_id);
 
             return response()->file(storage_path('app/permiso/' . $file));
+        }
+
+        if ($request->is('permiso_prov/*')) {
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('permiso_provisional', 'permiso_prov/' . $file)->first()->perfil->user_id);
+
+            return response()->file(storage_path('app/permiso_prov/' . $file));
         }
 
         abort(403, 'Usuario no autorizado para ver archivo');

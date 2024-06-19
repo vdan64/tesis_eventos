@@ -25,12 +25,13 @@ class TributoController extends Controller
         } else {
             $solicitudes = auth()->user()->perfil->solicitudes;
 
+            $solicitudes = $solicitudes->filter(fn($solicitud) => $solicitud->tributo != null);
             $tributos = $solicitudes->map(fn($solicitud) => $solicitud->tributo);
 
             $tributosPendientes = $tributos->map(fn($tributo) => $tributo->idpago == null);
             $tributosReportados = $tributos->map(fn($tributo) => $tributo->idpago != null);
 
-            return view('tributos.index', [
+            return view('solicitante.tributos.index', [
                 'tributosPendientes' => $tributosPendientes,
                 'tributosReportados' => $tributosReportados,
             ]);
@@ -61,8 +62,10 @@ class TributoController extends Controller
         return view('dat.tributos.create');
     }
 
-    public function store(Request $request, solicitud $solicitud)
+    public function store(Request $request)
     {
+        $id_solicitud = $request->input('solicitud_id');
+        $solicitud = solicitud::find($id_solicitud);
         if (auth()->user()->perfil->tipo == 'dat') {
             $solicitud->tributo()->create([
                 'descripcion' => $request->input('descripcion'),
@@ -70,7 +73,7 @@ class TributoController extends Controller
                 'monto' => $request->input('monto'),
             ]);
 
-            return to_route('dat.dashboard');
+            return back();
         }
         abort(403, 'No tiene autoridad');
     }

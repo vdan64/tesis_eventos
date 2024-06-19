@@ -23,12 +23,14 @@
                         <div class="">
                             <x-input-label for="Nsolicitud" :value="__('Numero de solicitud')"/>
                             <x-text-input placeholder="Nro. de solicitud" id="Nsolicitud"
-                                          class="block mt-1 w-full" type="text" name="Nsolicitud" value="{{ $solicitud->N_solicitud ?? "" }}"
+                                          class="block mt-1 w-full" type="text" name="Nsolicitud" value="{{ $solicitud->N_solicitud ?? '' }}"
                             />
                             <x-input-error :messages="$errors->get('Nsolicitud')" class="mt-2"/>
                         </div>
                         <div class="h-full content-end">
-                            <x-primary-button x-init="" x-on:click="asignarNumero({{ $solicitud->id }})">Asignar numero de solicitud</x-primary-button>
+                            @if($solicitud->estado == 'pendiente')
+                                <x-primary-button x-init="" x-on:click="asignarNumero({{ $solicitud->id }})">Asignar numero de solicitud</x-primary-button>
+                            @endif
                         </div>
                     </div>
 
@@ -102,10 +104,30 @@
 
                         </div>
                     </div>
+@if($solicitud->estado == 'provisional')
+
+                    <div class="col-span-full">
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="col-span-full">
+                                <x-input-label :value="__('Permiso provisional')"/>
+                            </div>
+                            <div class="col-span-1">
+                                <a href="{{ asset($solicitud->permiso_provisional) }}" target="_blank">
+                                    <div
+                                        class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                        <span class="app-text font-bold">Permiso provisional</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+@endif
 
                     <div class="flex">
-                        @if(!$solicitud->aprobado)
+                        @if($solicitud->estado == 'pendiente')
                             <div x-data="{ open: false }">
+
 
                                 <x-primary-button x-on:click="open = !open">Aprobar permiso provisional
                                 </x-primary-button>
@@ -167,7 +189,7 @@
 
             axios.patch(`/admin/solicitudes/${id}/aprobar`).then(res => {
                 if (res.status === 200) {
-                    window.location.assign('/admin/dashboard')
+                    window.location.assign('/admin/solicitudes/')
                 }
             })
 
@@ -179,7 +201,7 @@
             axios.patch(`/admin/solicitudes/${id}/asignarnumero`, { numero: numero }).then( res => {
                 if (res.status === 200) {
                     alert("Numero asignado")
-                    window.location.assign('/admin/dashboard')
+                    window.location.assign('/admin/solicitudes/')
                 }
                 })
         }
