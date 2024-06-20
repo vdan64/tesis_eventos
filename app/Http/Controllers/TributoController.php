@@ -81,7 +81,11 @@ class TributoController extends Controller
     public function reportar(Request $request, tributo $tributo)
     {
         if ($request->user()->perfil->tipo != 'solicitante') {
-            return abort(403, 'No tiene autoridad');
+            abort(403, 'No tiene autoridad');
+        }
+
+        if ($request->user()->perfil->id != $tributo->solicitud->perfil->id) {
+            abort(403, 'No tiene autoridad');
         }
 
         $fechapago = $request->input('fechapago');

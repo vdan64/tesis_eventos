@@ -50,19 +50,30 @@
 
                 <div class="grid grid-cols-8 gap-2">
                     <div class="col-span-1"><p class="app-text text-center">Fecha aprobacion</p></div>
-                    <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Nro. Solicitud</p></div>
                     <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
-                    <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Tributo asignado</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Pago reportado</p></div>
+                    <div class="col-span-1"><p class="app-text text-center">Pago confirmado</p></div>
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesProvisionales as $solicitud)
                             <li>
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
-                                    <div class="grid grid-cols-8">
+                                    <div class="grid grid-cols-8 gap-2">
                                         <p class="app-text col-span-1">{{ date_format(date_create($solicitud->fecha_permisoprovisional), 'd-m-Y') }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
+                                        <p class="app-text col-span-1">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                        <div class="app-text col-span-1 justify-self-center">
+                                            @if($solicitud->tributo)<x-ok-icon/>@else<x-x-icon/>@endif
+                                        </div>
+                                        <div class="app-text col-span-1 justify-self-center">
+                                            @if($solicitud->tributo?->idpago)<x-ok-icon/>@else<x-x-icon/>@endif
+                                        </div>
+                                        <div class="app-text col-span-1 justify-self-center">
+                                            @if($solicitud->tributo?->confirmado)<x-ok-icon/>@else<x-x-icon/>@endif
+                                        </div>
+
                                     </div>
                                 </a>
                             </li>
@@ -118,7 +129,7 @@
                     <div class="col-span-1"><p class="app-text text-center">Fecha rechazo</p></div>
                     <div class="col-span-2"><p class="app-text text-center">Nro. Solicitud</p></div>
                     <div class="col-span-3"><p class="app-text text-center">Nombre de evento</p></div>
-                    <div class="col-span-2"><p class="app-text text-center">Solicitante</p></div>
+                    <div class="col-span-2"><p class="app-text text-center">Razón</p></div>
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesRechazadas as $solicitud)
@@ -128,7 +139,7 @@
                                         <p class="app-text col-span-1">{{ date_format($solicitud->fecha_permisodefinitivo, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
+                                        <p class="app-text col-span-2">{{ $solicitud->razon_rechazo }}</p>
                                     </div>
                                 </a>
                             </li>

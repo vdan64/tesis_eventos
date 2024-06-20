@@ -21,10 +21,13 @@ class SolicitudController extends Controller
             $solicitudesAprobadas = solicitud::where('estado', 'aprobado')->get();
             $solicitudesPendientes = solicitud::where('estado', 'pendiente')->get();
             $solicitudesProvisionales = solicitud::where('estado', 'provisional')->get();
+            $solicitudesRechazadas = solicitud::where('estado', 'rechazado')->get();
+
             return view('funcionario.solicitudes.index', [
                 'solicitudesAprobadas' => $solicitudesAprobadas,
                 'solicitudesPendientes' => $solicitudesPendientes,
                 'solicitudesProvisionales' => $solicitudesProvisionales,
+                'solicitudesRechazadas' => $solicitudesRechazadas,
             ]);
         } else if (auth()->user()->perfil->tipo == 'dat') {
             $solProvisionales = solicitud::where('estado', 'provisional')->get();
@@ -190,5 +193,18 @@ class SolicitudController extends Controller
         }
 
         abort(403, 'Usuario no autorizado para ver archivo');
+    }
+
+    public function rechazar(Request $request, solicitud $solicitud)
+    {
+        if ($request->user()->perfil->tipo != 'funcionario') {
+            abort(403, 'No tiene autoridad para rechazar solicitudes.');
+        }
+
+        $solicitud->estado = 'rechazado';
+        $solicitud->razon_rechazo = $request->input('razon_rechazo');
+        $solicitud->save();
+
+        return response('OK', 200);
     }
 }

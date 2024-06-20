@@ -7,6 +7,27 @@
 
     <div class="py-12">
 
+        @if($solicitud->estado == 'rechazado')
+
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="app-surface p-6">
+                <div class="flex items-center gap-4">
+                    <x-x-icon/><p class="app-text"><span class="font-black">Atencion: </span>Esta solicitud fue rechazada en <time>{{ date_format($solicitud->updated_at, 'd-m-Y') }}</time>, por la razón descrita a continuación.</p>
+                </div>
+                <br>
+                <div>
+                    <p class="app-text">
+                        {{ $solicitud->razon_rechazo }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <br>
+            
+        @endif
+
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
 
@@ -126,18 +147,20 @@
 
                     <div class="flex">
                         @if($solicitud->estado == 'pendiente')
-                            <div x-data="{ open: false }">
+{{--                            opciones--}}
+                            <div class="grid" x-data="{ open: false }">
 
-
-                                <x-primary-button x-on:click="open = !open">Aprobar permiso provisional
-                                </x-primary-button>
+                                <div class="flex gap-4">
+                                    <x-danger-button x-on:click="$dispatch('open-modal', 'rechazarModal')">Rechazar</x-danger-button>
+                                    <x-primary-button @class('shrink-0') x-on:click="open = !open">Aprobar permiso provisional</x-primary-button>
+                                </div>
 
                                 {{--Modal--}}
                                 <div x-cloak
                                      class="fixed h-screen w-screen top-0 start-0 flex justify-center items-center"
                                      x-show="open">
                                     <div x-on:click="open = false"
-                                         class="h-screen w-screen fixed top-0 start-0 bg-black opacity-60 backdrop-blur-xl"></div>
+                                         class="h-screen w-screen fixed top-0 start-0 bg-black opacity-60"></div>
                                     <div
                                         class="w-[250px] h-min flex flex-col p-4 relative items-center justify-center bg-gray-800 border border-gray-800 shadow-lg rounded-2xl">
                                         <div class="">
@@ -184,6 +207,7 @@
             </div>
         </div>
     </div>
+
     <script>
         async function aprobarSolicitud(id) {
 
@@ -203,9 +227,47 @@
                     alert("Numero asignado")
                     window.location.assign('/admin/solicitudes/')
                 }
-                })
+            })
+        }
+
+        async function rechazarSolicitud(solicitud, razon) {
+
+            const res = await axios.patch(`/admin/solicitudes/${solicitud}/rechazar`, {
+                razon_rechazo: razon
+            })
+
+            if (res.status === 200) {
+                alert('La solicitud ha sido rechazada exitosamente.')
+                window.location.reload()
+            } else {
+                alert('Ocurrio un error')
+            }
         }
 
     </script>
 
+    @if($solicitud->estado == 'pendiente')
+{{--        modals--}}
+        <div>
+            <x-modal name="rechazarModal">
+                <div x-data="{razon_rechazo: ''}" class="p-6">
+                    <h2 class="app-text text-xl">Rechazar solicitud</h2>
+                    <br>
+                    <p class="app-text">Esta apunto de rechazar la presente solicitud. Describa las razones.</p>
+                    <br>
+                    <div class="grid grid-col-2">
+
+                    <x-input-label for="razon_rechazo" :value="__('Razón o explicación')"/>
+                    <x-text-input x-model="razon_rechazo" id="razon_rechazo" class="block mt-1 w-full"
+                                  required/>
+                    </div>
+                    <br>
+                    <div class="flex flex-row-reverse gap-4">
+                        <x-danger-button x-on:click="rechazarSolicitud({{ $solicitud->id }}, razon_rechazo)">Rechazar</x-danger-button>
+                        <x-secondary-button x-on:click="$dispatch('close-modal', 'rechazarModal')">Cancelar</x-secondary-button>
+                    </div>
+                </div>
+            </x-modal>
+        </div>
+    @endif
 </x-app-layout>
