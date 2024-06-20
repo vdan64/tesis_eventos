@@ -48,7 +48,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface">
                 <div class="p-6">
-                    <h2 class="app-text font-bold">Solicitudes pendientes por pagar</h2>
+                    <h2 class="app-text font-bold">Solicitudes pendientes</h2>
                     <p class="app-text">La siguientes solicitudes deben ser pagadas por el solicitante y reportadas a fin de confirmar el pago del tributo establecido</p>
                     <div class="grid grid-cols-8 gap-2">
                         <div class="col-span-1"><p class="app-text text-center">Fecha</p></div>

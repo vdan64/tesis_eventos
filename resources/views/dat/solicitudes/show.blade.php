@@ -112,41 +112,6 @@
                             </x-primary-button>
                         </div>
                     @endif
-                    <div>
-
-                        <x-modal name="tributoModal">
-                            <div class="p-6">
-                                <h2 class="app-text text-xl">Asignacion de tributo</h2>
-                                <br>
-
-                                <div x-data="{descripcion: '', monto: 0}" class="grid grid-cols-2 gap-4">
-                                    <div class="col-span-2">
-                                        <x-input-label for="descripcion" :value="__('Descripcion')"/>
-                                        <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
-                                                      x-model="descripcion" required/>
-                                        <x-input-error :messages="$errors->get('descripcion')" class="mt-2"/>
-                                    </div>
-
-                                    <div>
-                                        <x-input-label for="monto" :value="__('Monto')"/>
-                                        <x-text-input id="monto" class="block mt-1 w-full" type="text"
-                                                      x-model="monto" required/>
-                                        <x-input-error :messages="$errors->get('monto')" class="mt-2"/>
-                                    </div>
-
-                                    <div class="col-span-full flex justify-end">
-                                        <x-primary-button x-data
-                                                          @click="asignarTributo({{ $solicitud->id }}, descripcion, monto)">
-                                            Aceptar
-                                        </x-primary-button>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </x-modal>
-                    </div>
 
                 </div>
             </div>
@@ -175,26 +140,27 @@
 
                         </div>
 
+                        @if ($tributo->idpago)
                         <div class="col-span-full">
                             <h3 class="app-text font-bold">Información de pago</h3>
                         </div>
                         <div class="col-span-1">
                             <x-input-label for="idpago" :value="__('Referencia de pago')"/>
-                            <x-text-input disabled id="idpago" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled :value="$tributo->idpago" id="idpago" class="block mt-1 w-full" type="text"
                                           required/>
 
                         </div>
 
                         <div class="col-span-1">
                             <x-input-label for="cuenta_destino" :value="__('Cuenta destino')"/>
-                            <x-text-input disabled id="cuenta_destino" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled :value="$tributo->cuenta_destino" id="cuenta_destino" class="block mt-1 w-full" type="text"
                                           required/>
 
                         </div>
 
                         <div class="col-span-1">
                             <x-input-label for="fechapago" :value="__('Fecha de pago')"/>
-                            <x-text-input disabled id="fechapago" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled :value="date_format(date_create_from_format('Y-m-d', $tributo->fechapago), 'd-m-Y')" id="fechapago" class="block mt-1 w-full" type="text"
                                           required/>
 
                         </div>
@@ -202,19 +168,9 @@
                         <div class="col-span-1 flex flex-col justify-evenly items-center justify-self-center">
                             <x-input-label for="fechapago" :value="__('Confirmado')"/>
                             @if($tributo->confirmado)
-                                <span class="text-green-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="size-8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                    </svg>
-                                </span>
+                                <x-ok-icon/>
                             @else
-                                <span class="text-red-800">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5" stroke="currentColor" class="size-8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                    </svg>
-                                </span>
+                                <x-x-icon/>
                             @endif
                         </div>
                         {{--                        Opciones--}}
@@ -225,6 +181,7 @@
                                 @endif
                             </div>
                         </div>
+                        @endif
                     </div>
 
                 </div>
@@ -234,18 +191,55 @@
 {{--modals--}}
     <div>
         @if($solicitud->tributo)
+
         <x-modal name="confirmarPagoModal">
             <div class="p-6">
                 <h2 class="app-text text-xl">Confirmar pago</h2>
                 <br>
 
-                <p class="app-text">Estas seguro que deseas confirmar el pago de los tributos? <br><br>Recuerda realizar esta acción solo cuando se haya podido confirmar los fondos en la cuenta destino.</p>
+                <p class="app-text">¿Estas seguro que deseas confirmar el pago de los tributos? <br><br>Recuerda realizar esta acción solo cuando se haya podido confirmar los fondos en la cuenta destino.</p>
                 <div class="flex flex-row-reverse gap-4">
                     <x-primary-button x-on:click="confirmarPago({{ $tributo->id }})">Confirmar</x-primary-button>
                     <x-secondary-button x-on:click="$dispatch('close-modal', 'confirmarPagoModal')">Cancelar</x-secondary-button>
                 </div>
             </div>
         </x-modal>
+
+        @else
+
+            <x-modal name="tributoModal">
+                <div class="p-6">
+                    <h2 class="app-text text-xl">Asignacion de tributo</h2>
+                    <br>
+
+                    <div x-data="{descripcion: '', monto: 0}" class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <x-input-label for="descripcion" :value="__('Descripcion')"/>
+                            <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
+                                          x-model="descripcion" required/>
+                            <x-input-error :messages="$errors->get('descripcion')" class="mt-2"/>
+                        </div>
+
+                        <div>
+                            <x-input-label for="monto" :value="__('Monto')"/>
+                            <x-text-input id="monto" class="block mt-1 w-full" type="text"
+                                          x-model="monto" required/>
+                            <x-input-error :messages="$errors->get('monto')" class="mt-2"/>
+                        </div>
+
+                        <div class="col-span-full flex justify-end">
+                            <x-primary-button x-data
+                                              @click="asignarTributo({{ $solicitud->id }}, descripcion, monto)">
+                                Aceptar
+                            </x-primary-button>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </x-modal>
+
         @endif
     </div>
     <script>

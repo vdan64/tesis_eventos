@@ -136,10 +136,10 @@
                             <li>
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->fecha_permisodefinitivo, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
-                                        <p class="app-text col-span-2">{{ $solicitud->razon_rechazo }}</p>
+                                        <p class="app-text col-span-2">{{ mb_substr($solicitud->razon_rechazo, 0 , 30) . '...' }}</p>
                                     </div>
                                 </a>
                             </li>

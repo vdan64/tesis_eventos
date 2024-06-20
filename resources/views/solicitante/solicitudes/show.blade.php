@@ -6,6 +6,26 @@
     </x-slot>
     <div class="py-12">
 
+        @if($solicitud->estado == 'rechazado')
+
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="app-surface p-6">
+                    <div class="flex items-center gap-4">
+                        <x-x-icon/><p class="app-text"><span class="font-black">Atencion: </span>Esta solicitud fue rechazada en <time>{{ date_format($solicitud->updated_at, 'd-m-Y') }}</time>, por la razón descrita a continuación.</p>
+                    </div>
+                    <br>
+                    <div>
+                        <p class="app-text">
+                            {{ $solicitud->razon_rechazo }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+        @endif
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
 
