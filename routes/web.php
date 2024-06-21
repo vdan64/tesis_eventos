@@ -46,10 +46,6 @@ Route::middleware(['auth', 'role:solicitante'])->group(function () {
         return view('permisos-pagados');
     });
 
-    Route::get('rif/{file}', [SolicitudController::class, 'getFile']);
-    Route::get('permiso/{file}', [SolicitudController::class, 'getFile']);
-
-    Route::get('permiso_prov/{file}', [SolicitudController::class, 'getFile']);
 });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:funcionario'])->group(function () {
@@ -62,9 +58,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:funcionario'])
     Route::patch('/solicitudes/{solicitud}/aprobar', [SolicitudController::class, 'aprobar']);
     Route::patch('/solicitudes/{solicitud}/asignarnumero', [SolicitudController::class, 'asignarNumero']);
     Route::patch('/solicitudes/{solicitud}/rechazar', [SolicitudController::class, 'rechazar'])->name('solicitudes.rechazar');
+    Route::post('/solicitudes/{solicitud}/aprobardef', [SolicitudController::class, 'aprobarPermisoDefinitivo'])->name('solicitudes.aprobar.def');
 
     Route::prefix('tributos')->name('tributo.')->group(function () {
-
         Route::get('/', [TributoController::class, 'index'])->name('index');
         Route::get('/{tributo}', [TributoController::class, 'show'])->name('show');
         Route::post('/', [TributoController::class, 'create'])->name('store');
@@ -79,6 +75,10 @@ Route::prefix('dat')->name('dat.')->middleware(['auth', 'role:dat'])->group(func
         return view('dat.dashboard');
     })->name('dashboard');
 
+    Route::prefix('solicitudes')->name('solicitudes.')->group(function () {
+        Route::get('/', [SolicitudController::class, 'index'])->name('index');
+    });
+
     Route::prefix('tributos')->name('tributos.')->group(function () {
         Route::get('/', [TributoController::class, 'index'])->name('index');
         Route::get('/{tributo}', [TributoController::class, 'show'])->name('show');
@@ -90,6 +90,14 @@ Route::prefix('dat')->name('dat.')->middleware(['auth', 'role:dat'])->group(func
 
     Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
 
+});
+
+// files routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('rif/{file}', [SolicitudController::class, 'getFile']);
+    Route::get('permiso/{file}', [SolicitudController::class, 'getFile']);
+    Route::get('permiso_prov/{file}', [SolicitudController::class, 'getFile']);
+    Route::get('permiso_def/{file}', [SolicitudController::class, 'getFile']);
 });
 
 

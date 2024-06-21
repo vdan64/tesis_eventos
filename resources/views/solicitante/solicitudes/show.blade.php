@@ -6,6 +6,19 @@
     </x-slot>
     <div class="py-12">
 
+        @if($solicitud->estado == 'pagado')
+
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="app-surface p-6">
+                    <div class="flex items-center gap-4">
+                        <x-ok-icon/><p class="app-text"><span class="font-black">Atencion: </span>Esta solicitud se encuentra en espera de emisión de permiso definitivo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+        @endif
+
         @if($solicitud->estado == 'rechazado')
 
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -136,14 +149,14 @@
                     <div class="grid grid-cols-4 gap-4">
                         <div class="col-span-3">
                             <x-input-label for="descripcion" :value="__('Descripcion')"/>
-                            <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="descripcion" class="block mt-1 w-full" type="text"
                                           x-model="descripcion" required/>
 
                         </div>
 
                         <div class="col-span-1">
                             <x-input-label for="monto" :value="__('Monto')"/>
-                            <x-text-input id="monto" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="monto" class="block mt-1 w-full" type="text"
                                           x-model="monto" required/>
 
                         </div>
@@ -196,11 +209,16 @@
                         </div>
                         {{--                        Opciones--}}
                         <div class="col-span-full">
-                            <div class="flex">
+                            <div class="flex gap-4">
                                 @if(!$tributo->idpago)
                                     <x-primary-button x-data x-on:click="$dispatch('open-modal', 'reportarPagoModal')">
                                         Reportar pago
                                     </x-primary-button>
+                                @endif
+                                @if($tributo->confirmado)
+{{--                                        <x-primary-button x-data x-on:click="$dispatch('open-modal', 'solicitarPermisoDefinitivoModal')">--}}
+{{--                                            Solicitar permiso definitivo--}}
+{{--                                        </x-primary-button>--}}
                                 @endif
                             </div>
                         </div>
@@ -230,7 +248,7 @@
 
     <div>
 {{--        modals--}}
-        @if($solicitud->tributo)
+        @if($solicitud->tributo && ! $solicitud->tributo->idpago)
         <x-modal name="reportarPagoModal">
             <div x-data="{ idpago: '', cuenta_destino: '', fechapago: null }"  class="p-6">
                 <h2 class="app-text text-xl">Reporte de pago</h2>
@@ -264,6 +282,27 @@
                 </div>
             </div>
         </x-modal>
+        @endif
+        @if($solicitud->tributo && $solicitud->tributo->confirmado)
+            <x-modal name="solicitarPermisoDefinitivoModal">
+                <div class="p-6">
+                    <h2 class="app-text font-bold text-xl">Solicitar permiso definitivo</h2>
+                    <br>
+                    <p class="app-text">Se procederá a emitir el permiso definitivo del evento.</p>
+                    <br>
+                    <div class="flex flex-row-reverse gap-4">
+                        <x-primary-button x-on:click="solicitarPermisoDef()">Solicitar</x-primary-button>
+                        <x-secondary-button x-on:click="$dispatch('close-modal', 'solicitarPermisoDefinitivoModal')">Cancelar</x-secondary-button>
+                    </div>
+                </div>
+                <script>
+                    async function solicitarPermisoDef() {
+                        console.log('Emitido')
+                        alert('Permiso definitivo emitido exitosamente.')
+                        window.location.reload()
+                    }
+                </script>
+            </x-modal>
         @endif
     </div>
 </x-app-layout>

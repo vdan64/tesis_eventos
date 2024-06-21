@@ -9,21 +9,25 @@
 
         @if($solicitud->estado == 'rechazado')
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="app-surface p-6">
-                <div class="flex items-center gap-4">
-                    <x-x-icon/><p class="app-text"><span class="font-black">Atencion: </span>Esta solicitud fue rechazada en <time>{{ date_format($solicitud->updated_at, 'd-m-Y') }}</time>, por la razón descrita a continuación.</p>
-                </div>
-                <br>
-                <div>
-                    <p class="app-text">
-                        {{ $solicitud->razon_rechazo }}
-                    </p>
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="app-surface p-6">
+                    <div class="flex items-center gap-4">
+                        <x-x-icon/>
+                        <p class="app-text"><span class="font-black">Atencion: </span>Esta solicitud fue rechazada en
+                            <time>{{ date_format($solicitud->updated_at, 'd-m-Y') }}</time>
+                            , por la razón descrita a continuación.
+                        </p>
+                    </div>
+                    <br>
+                    <div>
+                        <p class="app-text">
+                            {{ $solicitud->razon_rechazo }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <br>
+            <br>
 
         @endif
 
@@ -44,13 +48,16 @@
                         <div class="">
                             <x-input-label for="Nsolicitud" :value="__('Numero de solicitud')"/>
                             <x-text-input placeholder="Nro. de solicitud" id="Nsolicitud"
-                                          class="block mt-1 w-full" type="text" name="Nsolicitud" value="{{ $solicitud->N_solicitud ?? '' }}"
+                                          class="block mt-1 w-full" type="text" name="Nsolicitud"
+                                          value="{{ $solicitud->N_solicitud ?? '' }}"
                             />
                             <x-input-error :messages="$errors->get('Nsolicitud')" class="mt-2"/>
                         </div>
                         <div class="h-full content-end">
                             @if($solicitud->estado == 'pendiente')
-                                <x-primary-button x-init="" x-on:click="asignarNumero({{ $solicitud->id }})">Asignar numero de solicitud</x-primary-button>
+                                <x-primary-button x-init="" x-on:click="asignarNumero({{ $solicitud->id }})">Asignar
+                                    numero de solicitud
+                                </x-primary-button>
                             @endif
                         </div>
                     </div>
@@ -125,34 +132,58 @@
 
                         </div>
                     </div>
-@if($solicitud->estado == 'provisional')
 
-                    <div class="col-span-full">
-                        <div class="grid grid-cols-4 gap-4">
-                            <div class="col-span-full">
-                                <x-input-label :value="__('Permiso provisional')"/>
-                            </div>
-                            <div class="col-span-1">
-                                <a href="{{ asset($solicitud->permiso_provisional) }}" target="_blank">
-                                    <div
-                                        class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
-                                        <span class="app-text font-bold">Permiso provisional</span>
-                                    </div>
-                                </a>
-                            </div>
+                    @if($solicitud->estado == 'provisional' || $solicitud->estado == 'pagado' || $solicitud->estado == 'aprobado')
 
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="col-span-full">
+                                    <x-input-label :value="__('Permiso provisional')"/>
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{{ asset($solicitud->permiso_provisional) }}" target="_blank">
+                                        <div
+                                            class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                            <span class="app-text font-bold">Permiso provisional</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-@endif
+                    @endif
+
+                    @if($solicitud->estado == 'aprobado')
+
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="col-span-full">
+                                    <x-input-label :value="__('Permiso definitivo')"/>
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{{ asset($solicitud->permiso_definitivo) }}" target="_blank">
+                                        <div
+                                            class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                            <span class="app-text font-bold">Permiso definitivo</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="flex">
                         @if($solicitud->estado == 'pendiente')
-{{--                            opciones--}}
+                            {{--                            opciones--}}
                             <div class="grid" x-data="{ open: false }">
 
                                 <div class="flex gap-4">
-                                    <x-danger-button x-on:click="$dispatch('open-modal', 'rechazarModal')">Rechazar</x-danger-button>
-                                    <x-primary-button @class('shrink-0') x-on:click="open = !open">Aprobar permiso provisional</x-primary-button>
+                                    <x-danger-button x-on:click="$dispatch('open-modal', 'rechazarModal')">Rechazar
+                                    </x-danger-button>
+                                    <x-primary-button @class('shrink-0') x-on:click="open = !open">Aprobar permiso
+                                        provisional
+                                    </x-primary-button>
                                 </div>
 
                                 {{--Modal--}}
@@ -205,7 +236,82 @@
 
                 </div>
             </div>
+
+
+
+            @if($solicitud->tributo)
+                @php
+                    $tributo = $solicitud->tributo;
+                @endphp
+
+                <br>
+                <div x-data="{ descripcion: @js($tributo->descripcion), monto: @js($tributo->monto) }" class="app-surface p-6">
+                    <h2 class="app-text font-bold">Tributo asignado</h2>
+                    <br>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="col-span-3">
+                            <x-input-label for="descripcion" :value="__('Descripcion')"/>
+                            <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
+                                          x-model="descripcion" required/>
+
+                        </div>
+
+                        <div class="col-span-1">
+                            <x-input-label for="monto" :value="__('Monto')"/>
+                            <x-text-input id="monto" class="block mt-1 w-full" type="text"
+                                          x-model="monto" required/>
+
+                        </div>
+
+                        @if ($tributo->idpago)
+                            <div class="col-span-full">
+                                <h3 class="app-text font-bold">Información de pago</h3>
+                            </div>
+                            <div class="col-span-1">
+                                <x-input-label for="idpago" :value="__('Referencia de pago')"/>
+                                <x-text-input disabled :value="$tributo->idpago" id="idpago" class="block mt-1 w-full" type="text"
+                                              required/>
+
+                            </div>
+
+                            <div class="col-span-1">
+                                <x-input-label for="cuenta_destino" :value="__('Cuenta destino')"/>
+                                <x-text-input disabled :value="$tributo->cuenta_destino" id="cuenta_destino" class="block mt-1 w-full" type="text"
+                                              required/>
+
+                            </div>
+
+                            <div class="col-span-1">
+                                <x-input-label for="fechapago" :value="__('Fecha de pago')"/>
+                                <x-text-input disabled :value="date_format(date_create_from_format('Y-m-d', $tributo->fechapago), 'd-m-Y')" id="fechapago" class="block mt-1 w-full" type="text"
+                                              required/>
+
+                            </div>
+
+                            <div class="col-span-1 flex flex-col justify-evenly items-center justify-self-center">
+                                <x-input-label for="fechapago" :value="__('Confirmado')"/>
+                                @if($tributo->confirmado)
+                                    <x-ok-icon/>
+                                @else
+                                    <x-x-icon/>
+                                @endif
+                            </div>
+                            {{--                        Opciones--}}
+                            <div class="col-span-full">
+                                <div class="flex">
+                                    @if($solicitud->estado == 'pagado')
+                                        <x-primary-button x-on:click="$dispatch('open-modal', 'aprobarPermisoDefModal')">Aprobar permiso definitivo</x-primary-button>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                </div>
+            @endif
         </div>
+
+
     </div>
 
     <script>
@@ -222,7 +328,7 @@
         function asignarNumero(id) {
 
             const numero = document.getElementById('Nsolicitud').value
-            axios.patch(`/admin/solicitudes/${id}/asignarnumero`, { numero: numero }).then( res => {
+            axios.patch(`/admin/solicitudes/${id}/asignarnumero`, {numero: numero}).then(res => {
                 if (res.status === 200) {
                     alert("Numero asignado")
                     window.location.assign('/admin/solicitudes/')
@@ -246,9 +352,10 @@
 
     </script>
 
-    @if($solicitud->estado == 'pendiente')
-{{--        modals--}}
+
+        {{--        modals--}}
         <div>
+            @if($solicitud->estado == 'pendiente')
             <x-modal name="rechazarModal">
                 <div x-data="{razon_rechazo: ''}" class="p-6">
                     <h2 class="app-text text-xl">Rechazar solicitud</h2>
@@ -257,17 +364,46 @@
                     <br>
                     <div class="grid grid-col-2">
 
-                    <x-input-label for="razon_rechazo" :value="__('Razón o explicación')"/>
-                    <x-text-input x-model="razon_rechazo" id="razon_rechazo" class="block mt-1 w-full"
-                                  required/>
+                        <x-input-label for="razon_rechazo" :value="__('Razón o explicación')"/>
+                        <x-text-input x-model="razon_rechazo" id="razon_rechazo" class="block mt-1 w-full"
+                                      required/>
                     </div>
                     <br>
                     <div class="flex flex-row-reverse gap-4">
-                        <x-danger-button x-on:click="rechazarSolicitud({{ $solicitud->id }}, razon_rechazo)">Rechazar</x-danger-button>
-                        <x-secondary-button x-on:click="$dispatch('close-modal', 'rechazarModal')">Cancelar</x-secondary-button>
+                        <x-danger-button x-on:click="rechazarSolicitud({{ $solicitud->id }}, razon_rechazo)">Rechazar
+                        </x-danger-button>
+                        <x-secondary-button x-on:click="$dispatch('close-modal', 'rechazarModal')">Cancelar
+                        </x-secondary-button>
                     </div>
                 </div>
             </x-modal>
+            @endif
+            @if ($solicitud->estado == 'pagado')
+                <x-modal name="aprobarPermisoDefModal" :show="true">
+                    <div class="p-6">
+                        <h2 class="app-text text-xl">Aprobar permiso definitivo</h2>
+                        <br>
+                        <p class="app-text">Esta apunto de aprobar el permiso definitivo de esta solicitud. ¿Desea proceder?</p>
+                        <br>
+                        <div class="flex flex-row-reverse gap-4">
+                            <x-danger-button x-on:click="aprobarPermisoDef({{ $solicitud->id }})">Rechazar
+                            </x-danger-button>
+                            <x-secondary-button x-on:click="$dispatch('close-modal', 'aprobarPermisoDefModal')">Cancelar
+                            </x-secondary-button>
+                        </div>
+                    </div>
+                    <script>
+                        async function aprobarPermisoDef(solicitud) {
+                            const res = await axios.post(`/admin/solicitudes/${solicitud}/aprobardef`)
+                            if (res === 200) {
+                                alert('Permiso definitivo aprobado exitosamente.')
+                            } else {
+                                alert('Ocurrio un error.')
+                            }
+                            window.location.reload()
+                        }
+                    </script>
+                </x-modal>
+                @endif
         </div>
-    @endif
 </x-app-layout>

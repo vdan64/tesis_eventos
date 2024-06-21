@@ -18,7 +18,7 @@
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesPendientes as $solicitud)
-                            <li>
+                            <li class="dark:even:bg-white/5 light:even:bg-black/5">
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
                                         <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>
@@ -58,7 +58,7 @@
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesProvisionales as $solicitud)
-                            <li>
+                            <li class="dark:even:bg-white/5 light:even:bg-black/5">
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8 gap-2">
                                         <p class="app-text col-span-1">{{ date_format(date_create($solicitud->fecha_permisoprovisional), 'd-m-Y') }}</p>
@@ -100,10 +100,10 @@
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesAprobadas as $solicitud)
-                            <li>
+                            <li class="dark:even:bg-white/5 light:even:bg-black/5">
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
-                                        <p class="app-text col-span-1">{{ date_format($solicitud->fecha_permisodefinitivo, 'd-m-Y') }}</p>
+                                        <p class="app-text col-span-1">{{ date_format(date_create_from_format('Y-m-d', $solicitud->fecha_permisodefinitivo), 'd-m-Y') }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->N_solicitud ?: "No asignado"  }}</p>
                                         <p class="app-text col-span-3">{{ $solicitud->descripcion }}</p>
                                         <p class="app-text col-span-2">{{ $solicitud->perfil->cedula }}</p>
@@ -133,7 +133,7 @@
                     <div class="col-span-full"><hr></div>
                     <ul class="col-span-full grid-cols-subgrid">
                         @forelse($solicitudesRechazadas as $solicitud)
-                            <li>
+                            <li class="dark:even:bg-white/5 light:even:bg-black/5">
                                 <a href="{{route('solicitudes.show', ['solicitud' => $solicitud->id])}}">
                                     <div class="grid grid-cols-8">
                                         <p class="app-text col-span-1">{{ date_format($solicitud->created_at, 'd-m-Y') }}</p>

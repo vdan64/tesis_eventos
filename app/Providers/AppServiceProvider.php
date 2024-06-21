@@ -24,14 +24,18 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        Gate::before(fn(User $user) => $user->perfil->tipo == 'funcionario');
+
         Gate::define('aprobar-solicitud', function (User $user, solicitud $solicitud) {
+            return $user->perfil()->tipo == 'funcionario';
+        });
+
+        Gate::define('aprobar-permiso-definitivo', function (User $user, solicitud $solicitud) {
             return $user->perfil()->tipo == 'funcionario';
         });
 
         Gate::define('asignar-numero', function (User $user, solicitud $solicitud) {
 
         });
-
-        Gate::before(fn(User $user) => $user->perfil->tipo == 'funcionario');
     }
 }

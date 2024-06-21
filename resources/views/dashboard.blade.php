@@ -15,9 +15,6 @@
                     </div>
                 </div>
                 <a href="{{ route('solicitudes.index') }}"><div class="rounded bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"><p class="p-6 text-gray-900 dark:text-gray-100">Eventos</p></div></a>
-                <a href="{{ route('tributos.index')  }}"><div class="rounded bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"><p class="p-6 text-gray-900 dark:text-gray-100">Tributos</p></div></a>
-                <a href=""><div class="rounded bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"><p class="p-6 text-gray-900 dark:text-gray-100">Inspecciones</p></div></a>
-                <a href=""><div class="rounded bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg"><p class="p-6 text-gray-900 dark:text-gray-100">Opcion 4</p></div></a>
             </div>
         </div>
     </div>

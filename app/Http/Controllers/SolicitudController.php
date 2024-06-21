@@ -20,7 +20,7 @@ class SolicitudController extends Controller
 
             $solicitudesAprobadas = solicitud::where('estado', 'aprobado')->get();
             $solicitudesPendientes = solicitud::where('estado', 'pendiente')->get();
-            $solicitudesProvisionales = solicitud::where('estado', 'provisional')->get();
+            $solicitudesProvisionales = solicitud::where('estado', 'provisional')->orWhere('estado', 'pagado')->get();
             $solicitudesRechazadas = solicitud::where('estado', 'rechazado')->get();
 
             return view('funcionario.solicitudes.index', [
@@ -175,21 +175,27 @@ class SolicitudController extends Controller
     {
         if ($request->is('rif/*')) {
 
-            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('url_rif', 'rif/' . $file)->first()->perfil->user_id);
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->perfil->tipo == 'dat' || $user->id == solicitud::where('url_rif', 'rif/' . $file)->first()->perfil->user_id);
 
             return response()->file(storage_path('app/rif/' . $file));
         }
 
         if ($request->is('permiso/*')) {
-            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('url_permiso', 'permiso/' . $file)->first()->perfil->user_id);
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->perfil->tipo == 'dat' || $user->id == solicitud::where('url_permiso', 'permiso/' . $file)->first()->perfil->user_id);
 
             return response()->file(storage_path('app/permiso/' . $file));
         }
 
         if ($request->is('permiso_prov/*')) {
-            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->id == solicitud::where('permiso_provisional', 'permiso_prov/' . $file)->first()->perfil->user_id);
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->perfil->tipo == 'dat' || $user->id == solicitud::where('permiso_provisional', 'permiso_prov/' . $file)->first()->perfil->user_id);
 
             return response()->file(storage_path('app/permiso_prov/' . $file));
+        }
+
+        if ($request->is('permiso_def/*')) {
+            Gate::allowIf(fn(User $user) => $user->perfil->tipo == 'funcionario' || $user->perfil->tipo == 'dat' || $user->id == solicitud::where('permiso_definitivo', 'permiso_def/' . $file)->first()->perfil->user_id);
+
+            return response()->file(storage_path('app/permiso_def/' . $file));
         }
 
         abort(403, 'Usuario no autorizado para ver archivo');
@@ -206,5 +212,26 @@ class SolicitudController extends Controller
         $solicitud->save();
 
         return response('OK', 200);
+    }
+
+    public function aprobarPermisoDefinitivo(Request $request, solicitud $solicitud)
+    {
+        if (Gate::allows('aprobar-permiso-definitivo', $solicitud)) {
+
+            if ($solicitud->estado == 'aprobado') {
+                return response('La solicitud ya se encuentra aprobada', 400);
+            }
+
+            if ($solicitud->estado != 'pagado') {
+                return response('La solicitud debe ser pagada antes', 400);
+            }
+
+            $solicitud->estado = 'aprobado';
+            $solicitud->fecha_permisodefinitivo = now();
+            $solicitud->permiso_definitivo = 'permiso_def/permiso_definitivo.pdf';
+            $solicitud->save();
+            return response('Permiso definitivo aprobado', 200);
+        }
+        abort(403, 'No posee autoridad para aprobar el permiso');
     }
 }

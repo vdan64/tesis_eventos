@@ -106,6 +106,26 @@
 
                     </div>
 
+                    @if($solicitud->estado == 'provisional' || $solicitud->estado == 'pagado' || $solicitud->estado == 'aprobado')
+
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="col-span-full">
+                                    <x-input-label :value="__('Permiso provisional')"/>
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{{ asset($solicitud->permiso_provisional) }}" target="_blank">
+                                        <div
+                                            class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                            <span class="app-text font-bold">Permiso provisional</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
+
                     @if(!$solicitud->tributo)
                         <div x-data>
                             <x-primary-button @click="$dispatch('open-modal', 'tributoModal')">Asignar tributo
@@ -116,12 +136,14 @@
                 </div>
             </div>
 
-            <br>
+
 
             @if($solicitud->tributo)
                 @php
                     $tributo = $solicitud->tributo;
                 @endphp
+
+                <br>
                 <div x-data="{ descripcion: @js($tributo->descripcion), monto: @js($tributo->monto) }" class="app-surface p-6">
                     <h2 class="app-text font-bold">Tributo asignado</h2>
                     <br>
