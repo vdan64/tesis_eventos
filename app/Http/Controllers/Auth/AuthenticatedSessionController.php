@@ -30,6 +30,8 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->user()->perfil->tipo == 'funcionario') {
             return redirect()->intended(route('admin.dashboard', absolute: false));
+        } else if ($request->user()->perfil->tipo == 'dat') {
+            return redirect()->intended(route('dat.dashboard', absolute: false));
         }
 
         return redirect()->intended(route('dashboard', absolute: false));

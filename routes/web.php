@@ -11,12 +11,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth', 'verified']);
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:solicitante'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -48,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('permiso_prov/{file}', [SolicitudController::class, 'getFile']);
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:funcionario'])->group(function () {
     Route::get('/dashboard', function () {
         return view('funcionario.dashboard');
     })->name('dashboard');
@@ -68,10 +72,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
 
-})->middleware(['auth']);
+});
 
-Route::prefix('dat')->name('dat.')->group(function () {
-    Route::get('/', function () {
+Route::prefix('dat')->name('dat.')->middleware(['auth', 'role:dat'])->group(function () {
+    Route::get('/dashboard', function () {
         return view('dat.dashboard');
     })->name('dashboard');
 
@@ -86,8 +90,7 @@ Route::prefix('dat')->name('dat.')->group(function () {
 
     Route::get('/solicitudes/{solicitud}', [SolicitudController::class, 'show'])->name('solicitudes.show');
 
-})->middleware(['auth']);
-
+});
 
 
 require __DIR__ . '/auth.php';
