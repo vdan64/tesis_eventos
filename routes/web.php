@@ -8,7 +8,7 @@ use App\Models\solicitud;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome2');
 });
 
 //Route::get('/dashboard', function () {
