@@ -150,14 +150,14 @@
                     <div class="grid grid-cols-4 gap-4">
                         <div class="col-span-3">
                             <x-input-label for="descripcion" :value="__('Descripcion')"/>
-                            <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="descripcion" class="block mt-1 w-full" type="text"
                                           x-model="descripcion" required/>
 
                         </div>
 
                         <div class="col-span-1">
                             <x-input-label for="monto" :value="__('Monto')"/>
-                            <x-text-input id="monto" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="monto" class="block mt-1 w-full" type="text"
                                           x-model="monto" required/>
 
                         </div>
@@ -220,6 +220,7 @@
                 <br>
 
                 <p class="app-text">¿Estas seguro que deseas confirmar el pago de los tributos? <br><br>Recuerda realizar esta acción solo cuando se haya podido confirmar los fondos en la cuenta destino.</p>
+                <br>
                 <div class="flex flex-row-reverse gap-4">
                     <x-primary-button x-on:click="confirmarPago({{ $tributo->id }})">Confirmar</x-primary-button>
                     <x-secondary-button x-on:click="$dispatch('close-modal', 'confirmarPagoModal')">Cancelar</x-secondary-button>
@@ -283,6 +284,8 @@
             if (res.status === 200) {
                 alert('Pago confirmado exitosamente')
                 window.location.reload()
+            } else {
+                alert('Ha ocurrido un error.')
             }
         }
     </script>

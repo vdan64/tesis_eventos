@@ -153,7 +153,27 @@
                             </div>
                         </div>
                     @endif
-                    
+
+                    @if($solicitud->estado == 'aprobado')
+
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="col-span-full">
+                                    <x-input-label :value="__('Permiso definitivo')"/>
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{{ asset($solicitud->permiso_definitivo) }}" target="_blank">
+                                        <div
+                                            class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                            <span class="app-text font-bold">Permiso definitivo</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
 
@@ -187,7 +207,7 @@
                         </div>
                         <div class="col-span-1">
                             <x-input-label for="idpago" :value="__('Referencia de pago')"/>
-                            <x-text-input disabled :value="$tributo->monto ?? ''" id="idpago" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled :value="$tributo->idpago ?? ''" id="idpago" class="block mt-1 w-full" type="text"
                                           required/>
 
                         </div>
@@ -256,7 +276,7 @@
                         })
 
                         if (res.status === 200) {
-                            alert('Pago reportado exitosamente. Debe esperar que sea confirmado para solicitar el permiso definitivo')
+                            alert('Pago reportado exitosamente. El permiso definitivo será emitido una vez el pago haya sido confirmado.')
                             window.location.reload()
                         } else {
                             alert('Ocurrió un error: ' + res.statusText)

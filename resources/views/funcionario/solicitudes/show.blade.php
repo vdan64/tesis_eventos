@@ -251,14 +251,14 @@
                     <div class="grid grid-cols-4 gap-4">
                         <div class="col-span-3">
                             <x-input-label for="descripcion" :value="__('Descripcion')"/>
-                            <x-text-input id="descripcion" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="descripcion" class="block mt-1 w-full" type="text"
                                           x-model="descripcion" required/>
 
                         </div>
 
                         <div class="col-span-1">
                             <x-input-label for="monto" :value="__('Monto')"/>
-                            <x-text-input id="monto" class="block mt-1 w-full" type="text"
+                            <x-text-input disabled id="monto" class="block mt-1 w-full" type="text"
                                           x-model="monto" required/>
 
                         </div>
@@ -379,15 +379,15 @@
             </x-modal>
             @endif
             @if ($solicitud->estado == 'pagado')
-                <x-modal name="aprobarPermisoDefModal" :show="true">
+                <x-modal name="aprobarPermisoDefModal">
                     <div class="p-6">
                         <h2 class="app-text text-xl">Aprobar permiso definitivo</h2>
                         <br>
                         <p class="app-text">Esta apunto de aprobar el permiso definitivo de esta solicitud. ¿Desea proceder?</p>
                         <br>
                         <div class="flex flex-row-reverse gap-4">
-                            <x-danger-button x-on:click="aprobarPermisoDef({{ $solicitud->id }})">Rechazar
-                            </x-danger-button>
+                            <x-primary-button x-on:click="aprobarPermisoDef({{ $solicitud->id }})">Aprobar
+                            </x-primary-button>
                             <x-secondary-button x-on:click="$dispatch('close-modal', 'aprobarPermisoDefModal')">Cancelar
                             </x-secondary-button>
                         </div>
@@ -395,7 +395,7 @@
                     <script>
                         async function aprobarPermisoDef(solicitud) {
                             const res = await axios.post(`/admin/solicitudes/${solicitud}/aprobardef`)
-                            if (res === 200) {
+                            if (res.status === 200) {
                                 alert('Permiso definitivo aprobado exitosamente.')
                             } else {
                                 alert('Ocurrio un error.')

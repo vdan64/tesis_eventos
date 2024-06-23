@@ -107,7 +107,7 @@ class TributoController extends Controller
         }
 
         $tributo->confirmado = true;
-        $tributo->solicitud->estado == 'pagado';
+        $tributo->solicitud->estado = 'pagado';
         $tributo->solicitud->save();
         $tributo->save();
         return response('OK', 200);

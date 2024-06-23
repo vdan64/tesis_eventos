@@ -90,7 +90,7 @@
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="app-surface p-6">
-                <h2 class="app-text font-bold">Solicitudes definitivas</h2>
+                <h2 class="app-text font-bold">Solicitudes aprobadas</h2>
 
                 <div class="grid grid-cols-8 gap-2">
                     <div class="col-span-1"><p class="app-text text-center">Fecha aprobacion</p></div>
