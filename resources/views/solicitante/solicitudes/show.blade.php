@@ -133,6 +133,27 @@
 
                         </div>
                     </div>
+
+                    @if($solicitud->estado == 'provisional' || $solicitud->estado == 'pagado' || $solicitud->estado == 'aprobado')
+
+                        <div class="col-span-full">
+                            <div class="grid grid-cols-4 gap-4">
+                                <div class="col-span-full">
+                                    <x-input-label :value="__('Permiso provisional')"/>
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{{ asset($solicitud->permiso_provisional) }}" target="_blank">
+                                        <div
+                                            class="dark:bg-gray-900 dark:hover:bg-gray-700 rounded-md p-6 text-center h-full place-content-center">
+                                            <span class="app-text font-bold">Permiso provisional</span>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    @endif
+                    
                 </div>
             </div>
 
